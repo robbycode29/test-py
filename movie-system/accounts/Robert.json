@@ -1,0 +1,20 @@
+{
+    "movies": [
+        {
+            "genre": "Sci-fi",
+            "watched": true,
+            "name": "Interstellar"
+        },
+        {
+            "genre": "Action",
+            "watched": false,
+            "name": "Top Gun"
+        },
+        {
+            "genre": "Sci-fi",
+            "watched": true,
+            "name": "Star Wars"
+        }
+    ],
+    "name": "Robert"
+}

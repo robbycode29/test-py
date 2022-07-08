@@ -9,13 +9,13 @@ def db(user_list):
 }
 
 def fetch_users():
-    with open("users.json", "r") as f:
+    with open("./accounts/users.json", "r") as f:
         try:
             users = []
             data = json.load(f)
             accounts = data['users']
             for user in accounts:
-                with open('{}'.format(user) + ".json", "r") as f:
+                with open('./accounts/{}'.format(user) + ".json", "r") as f:
                     user_data = json.load(f)
                     users.append(User.from_json(user_data))
             return users
@@ -24,13 +24,17 @@ def fetch_users():
 
 def create_user(name):
     users.append(User(name))
-    with open("users.json", "w") as f:
+    with open("./accounts/users.json", "w") as f:
         json.dump(db(users), f)
         user = users[-1]
     return user
 
 def delete_user(user):
+    users.remove(user)
+    with open("./accounts/users.json", "w") as f:
+        json.dump(db(users), f)
     del user
+    user = users[-1]
 
 def user_select_menu():
     for i, user in enumerate(users):

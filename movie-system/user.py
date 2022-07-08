@@ -48,11 +48,11 @@ class User():
         return User(name, movies)
 
     def save_to_file_as_json(self):
-        with open(self.name + ".json", "w") as f:
+        with open("./accounts/{}".format(self.name) + ".json", "w") as f:
             json.dump(self.json(), f)
 
     def load_user_from_file_as_json(self):
-        with open(self.name + ".json", "r") as f:
+        with open("./accounts/{}".format(self.name) + ".json", "r") as f:
             data = json.load(f)
             self.name = data["name"]
             self.movies = [Movie.from_json(movie) for movie in data["movies"]]

@@ -1,0 +1,15 @@
+{
+    "movies": [
+        {
+            "genre": "Sci-fi",
+            "watched": true,
+            "name": "Avatar"
+        },
+        {
+            "genre": "Sci-fi, Action",
+            "watched": false,
+            "name": "Terminator"
+        }
+    ],
+    "name": "Garry"
+}
