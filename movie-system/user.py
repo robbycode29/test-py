@@ -1,15 +1,15 @@
-import csv
+# import csv
 import json
 
 from movie import Movie
 
 class User():
-    def __init__(self, name):
+    def __init__(self, name, movies=[]):
         self.name = name
-        self.movies = []
+        self.movies = movies
     
     def __repr__(self):
-        return "User {}, Movies: {}".format(self.name, self.movies)
+        return "{}".format(self.name)
 
     def watched_movies(self):
         return [movie for movie in self.movies if movie.watched]
@@ -36,9 +36,16 @@ class User():
 
     def json(self):
         return {
-            "name": self.name,
-            "movies": [movie.json() for movie in self.movies]
+                "name": self.name,
+                "movies": [movie.json() for movie in self.movies]
         }
+        
+    
+    @classmethod
+    def from_json(cls, json_data):
+        name = json_data["name"]
+        movies = [Movie.from_json(movie) for movie in json_data["movies"]]
+        return User(name, movies)
 
     def save_to_file_as_json(self):
         with open(self.name + ".json", "w") as f:

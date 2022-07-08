@@ -20,7 +20,4 @@ class Movie():
 
     @classmethod
     def from_json(cls, json_data):
-        # name = json_data["name"]
-        # genre = json_data["genre"]
-        # watched = json_data["watched"]
         return Movie(**json_data)

@@ -1,27 +1,32 @@
 from movie import Movie
 from user import User
-
-# user.add_movie(Movie("Spiderman", "Action", True))
-# user.add_movie(Movie("Avatar", "Action", False))
-# user.add_movie(Movie("Titanic", "Drama", True))
-# user.add_movie(Movie("The Matrix", "Action", True))
+import json
 
 
-# user.save_to_file()
+def db(user_list):
+        return {
+            "users": ["{}".format(user.name) for user in user_list]
+}
 
-# user.load_user_from_file()
-# print(user)
-# print(user.movies)
-
-# user.save_to_file_as_json()
-
-# print(user.load_user_from_file_as_json())
-
-users = []
+def fetch_users():
+    with open("users.json", "r") as f:
+        try:
+            users = []
+            data = json.load(f)
+            accounts = data['users']
+            for user in accounts:
+                with open('{}'.format(user) + ".json", "r") as f:
+                    user_data = json.load(f)
+                    users.append(User.from_json(user_data))
+            return users
+        except: 
+            return []
 
 def create_user(name):
     users.append(User(name))
-    user = users[-1]
+    with open("users.json", "w") as f:
+        json.dump(db(users), f)
+        user = users[-1]
     return user
 
 def delete_user(user):
@@ -48,6 +53,8 @@ def menu():
     choice = input("Your choice: ")
     return choice
 
+
+users = fetch_users()
 
 if __name__ == '__main__':
     while True:
