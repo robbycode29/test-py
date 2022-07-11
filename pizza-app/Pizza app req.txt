@@ -1,0 +1,26 @@
+create pizza ca obiect:
+	id 
+	nume
+	ingrediente
+	data
+	pret 
+
+ingrediente - clasa
+
+	id
+	nume
+	pret
+
+
+functionalitati:
+	
+	sa poti crea o pizza
+	sa calculeze pretul total bazat pe ingred si adaos
+	data aplicata automat
+	sa se salveze informatiile in fisiere individuale json
+
+	sa ai trei tipuri de pizza standard
+
+	3 ingrediente implicite:  blat, sos rosii, mozzarella
+
+	optional: sa poti alege tipul de blat
