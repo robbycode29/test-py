@@ -1,6 +1,8 @@
+from binascii import Error
 from movie import Movie
 from user import User
 import json
+import os
 
 
 def db(user_list):
@@ -33,8 +35,20 @@ def delete_user(user):
     users.remove(user)
     with open("./accounts/users.json", "w") as f:
         json.dump(db(users), f)
-    del user
-    user = users[-1]
+    path_to_accounts = "accounts"
+    user_to_remove = str(user) + ".json"
+    if os.path.exists(path_to_accounts):
+        path_to_be_removed = os.path.join(path_to_accounts, user_to_remove)
+        print(path_to_be_removed)
+        try:
+            # os.chmod(path_to_be_removed, 0o777)
+            os.remove(path_to_be_removed)
+        except Exception as e:
+            print("Error:" + e)
+        del user
+        user = users[-1]
+    else:
+        print("No accounts found")
 
 def user_select_menu():
     for i, user in enumerate(users):
