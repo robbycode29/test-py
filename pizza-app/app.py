@@ -121,11 +121,17 @@ if __name__ == '__main__':
             ingredient.save_record()
         elif choice == '8':
             Ingredient.load_records()
-            print("Ingredients:")
-            for ingredient in Ingredient.records:
-                print((ingredient['id'], str(ingredient['name']), str("{} RON".format(ingredient['price_per_unit'])), ingredient['quantity'], str(ingredient['date'])))
-            ingredient_id = input('Ingredient id: ')
-            Ingredient.remove_record(ingredient_id)
+            if len(Ingredient.records) == 0:
+                print('No ingredients')
+            else:
+                print("Ingredients:")
+                for ingredient in Ingredient.records:
+                    print((ingredient['id'], str(ingredient['name']), str("{} RON".format(ingredient['price_per_unit'])), ingredient['quantity'], str(ingredient['date'])))
+                ingredient_id = input('Ingredient id (type "none" to esc): ')
+                if ingredient_id == 'none':
+                    pass
+                else:
+                    Ingredient.remove_record(ingredient_id)
         elif choice == '9':
             break
         else:
