@@ -24,3 +24,10 @@ functionalitati:
 	3 ingrediente implicite:  blat, sos rosii, mozzarella
 
 	optional: sa poti alege tipul de blat
+
+
+	de la custom pizza sa se creeze pe baza a 3 ingrediente implicite + add indgrediente din lista
+
+	sa calculeze pretul
+
+	recreaza meniul ca market funnel

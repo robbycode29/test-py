@@ -76,6 +76,10 @@ def menu():
     print('9. Exit')
     return input('Your choice: ')
 
+def main_menu():
+    print('Welcome to the pizza shop!')
+    print('1. Order a pizza')
+    print('2. See order history')
 
 
 if __name__ == '__main__':
