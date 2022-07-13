@@ -62,29 +62,68 @@ class Pizza():
 
     @classmethod    
     def create_margerita(cls, id):
-        blat_normal = Ingredient('blat_normal', 5, 0.15)
-        topping = Ingredient('mozzarella', 10, 0.08)
-        sos = Ingredient('tomato_sauce', 8, 0.05)
+        # blat_normal = Ingredient('blat_normal', 5, 0.15)
+        # topping = Ingredient('mozzarella', 10, 0.08)
+        # sos = Ingredient('tomato_sauce', 8, 0.05)
+        # standard_ingredients = [blat_normal, topping, sos]
+
+        for record in Ingredient.records:
+            if record.name == 'blat_normal':
+                blat_normal = record
+            if record.name == 'mozzarella':
+                topping = record
+            if record.name == 'tomato_sauce':
+                sos = record
+
         standard_ingredients = [blat_normal, topping, sos]
+
         return Pizza(id, 'Margerita', standard_ingredients)
 
     @classmethod
     def create_salami(cls, id):
-        blat_normal = Ingredient('blat_normal', 5, 0.15)
-        topping = Ingredient('mozzarella', 10, 0.08)
-        sos = Ingredient('tomato_sauce', 8, 0.05)
-        salami = Ingredient('salami', 15, 0.1)
+        # blat_normal = Ingredient('blat_normal', 5, 0.15)
+        # topping = Ingredient('mozzarella', 10, 0.08)
+        # sos = Ingredient('tomato_sauce', 8, 0.05)
+        # salami = Ingredient('salami', 15, 0.1)
+        # standard_ingredients = [blat_normal, topping, sos, salami]
+
+        for record in Ingredient.records:
+            if record.name == 'blat_normal':
+                blat_normal = record
+            if record.name == 'mozzarella':
+                topping = record
+            if record.name == 'tomato_sauce':
+                sos = record
+            if record.name == 'salami':
+                salami = record
+            
         standard_ingredients = [blat_normal, topping, sos, salami]
+
         return Pizza(id, 'Salami', standard_ingredients)
 
     @classmethod
     def create_capricciosa(cls, id):
-        blat_normal = Ingredient('blat_normal', 5, 0.15)
-        topping = Ingredient('mozzarella', 10, 0.08)
-        sos = Ingredient('tomato_sauce', 8, 0.05)
-        salami = Ingredient('salami', 15, 0.1)
-        pepperoni = Ingredient('pepperoni', 20, 0.15)
+        # blat_normal = Ingredient('blat_normal', 5, 0.15)
+        # topping = Ingredient('mozzarella', 10, 0.08)
+        # sos = Ingredient('tomato_sauce', 8, 0.05)
+        # salami = Ingredient('salami', 15, 0.1)
+        # pepperoni = Ingredient('pepperoni', 20, 0.15)
+        # standard_ingredients = [blat_normal, topping, sos, salami, pepperoni]
+
+        for record in Ingredient.records:
+            if record.name == 'blat_normal':
+                blat_normal = record
+            if record.name == 'mozzarella':
+                topping = record
+            if record.name == 'tomato_sauce':
+                sos = record
+            if record.name == 'salami':
+                salami = record
+            if record.name == 'pepperoni':
+                pepperoni = record
+            
         standard_ingredients = [blat_normal, topping, sos, salami, pepperoni]
+
         return Pizza(id, 'Capricciosa', standard_ingredients)
 
     @classmethod

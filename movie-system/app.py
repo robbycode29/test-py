@@ -1,8 +1,8 @@
-from binascii import Error
+import os
 from movie import Movie
 from user import User
 import json
-import os
+
 
 
 def db(user_list):
@@ -83,6 +83,7 @@ if __name__ == '__main__':
         elif choice == "1":
             name = input("Name: ")
             user = create_user(name)
+            user.save_to_file_as_json()
         elif choice == "2":
             delete_user(user)
         elif choice == "3":
@@ -106,6 +107,5 @@ if __name__ == '__main__':
             break
         else:
             print("Invalid choice")
-        user.save_to_file_as_json()
     print("Bye!")
     
