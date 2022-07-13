@@ -30,7 +30,7 @@ class Ingredient():
     def record_JSON(self):
         return {
             "records": [
-                record for record in self.records
+                record.toJSON() for record in self.records
             ]
         }
 
@@ -38,7 +38,12 @@ class Ingredient():
     def load_records(cls):
         with open('./db/ingredients.json', 'r') as f:
             ingredients = json.load(f)
-            cls.records = ingredients['records']
+            if len(ingredients) == 0:
+                pass
+            else:
+                for ingredient in ingredients['records']:
+                    new_ingredient = Ingredient(ingredient['name'], ingredient['price_per_unit'], ingredient['quantity'], ingredient['unit'])
+                    cls.records.append(new_ingredient)
 
     def __repr__(self):
         return "{}".format(self.name)
@@ -47,17 +52,17 @@ class Ingredient():
         if len(self.records) == 0:
             return 1
         else:
-            return self.records[-1]['id'] + 1
+            return self.records[-1].id + 1
     
     def save_record(self):
-        self.records.append(self.toJSON())
+        self.records.append(self)
         with open('./db/ingredients.json', 'w') as f:
             json.dump(self.record_JSON(), f)
 
     @classmethod
     def remove_record(cls, id):
         for record in cls.records:
-            if record['id'] == int(id):
+            if record.id == int(id):
                 cls.records.remove(record)
                 with open('./db/ingredients.json', 'w') as f:
                     json.dump(cls.record_JSON(), f)

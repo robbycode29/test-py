@@ -42,19 +42,77 @@ def create_pizza(id, pizza_type):
     else:
         raise ValueError('Invalid pizza type')
 
+def create_basic_ingredients():
+    blat_normal = Ingredient('blat_normal', 5, 0.15)
+    blat_subtire = Ingredient('blat_subtire', 4, 0.15)
+    blat_pufos = Ingredient('blat_pufos', 6, 0.15)
+    topping = Ingredient('mozzarella', 10, 0.08)
+    sos = Ingredient('tomato_sauce', 8, 0.05)
+    salami = Ingredient('salami', 15, 0.1)
+    pepperoni = Ingredient('pepperoni', 20, 0.15)
+
+    blat_normal_exists = False
+    blat_subtire_exists = False
+    blat_pufos_exists = False
+    topping_exists = False
+    sos_exists = False
+    salami_exists = False
+    pepperoni_exists = False
+    for ingredient in Ingredient.records:
+        if ingredient.name == 'blat_normal':
+            blat_normal_exists = True
+        if ingredient.name == 'blat_subtire':
+            blat_subtire_exists = True
+        if ingredient.name == 'blat_pufos':
+            blat_pufos_exists = True
+        if ingredient.name == 'mozzarella':
+            topping_exists = True
+        if ingredient.name == 'tomato_sauce':
+            sos_exists = True
+        if ingredient.name == 'salami':
+            salami_exists = True
+        if ingredient.name == 'pepperoni':
+            pepperoni_exists = True
+    
+    if not blat_normal_exists:
+        blat_normal.id = blat_normal.get_id()
+        blat_normal.save_record()
+    if not blat_subtire_exists:
+        blat_subtire.id = blat_subtire.get_id()
+        blat_subtire.save_record()
+    if not blat_pufos_exists:
+        blat_pufos.id = blat_pufos.get_id()
+        blat_pufos.save_record()
+    if not topping_exists:
+        topping.id = topping.get_id()
+        topping.save_record()
+    if not sos_exists:
+        sos.id = sos.get_id()
+        sos.save_record()
+    if not salami_exists:
+        salami.id = salami.get_id()
+        salami.save_record()
+    if not pepperoni_exists:
+        pepperoni.id = pepperoni.get_id()
+        pepperoni.save_record()
+   
+
 #######################################################################################################################
 ####                                                    Menus                                                     #####
 
 def choose_ingredients(pizza):
-    ingredients_to_be_added = []
-    Ingredient.load_records()
+    # if len(pizza.ingredients) != 0:
+    #     ingredients_to_be_added = pizza.ingredients
+    # else:
+    #     ingredients_to_be_added = []
     while True:
-        print ("Extra ingredients:")
-        if len(ingredients_to_be_added) != 0:
-            for ingredient in ingredients_to_be_added:
-                print("{}. {}".format(ingredient['id'], ingredient['name']))
+        print ("Current ingredients:")
+        if len(pizza.ingredients) != 0:
+            for ingredient in pizza.ingredients:
+                print("{}. {}".format(ingredient.id, ingredient.name))
         else:
-            print("No extra ingredients")
+            print("No ingredients")
+
         print("Would you like to add an extra ingredient?")
         print('1. Add ingredient')
         print('2. Remove ingredient')
@@ -63,21 +121,23 @@ def choose_ingredients(pizza):
         if choice == '1':
             print ('Available ingredients:')
             for ingredient in Ingredient.records:
-                print((ingredient['id'], str(ingredient['name'])))
+                print((ingredient.id, str(ingredient.name)))
             choice = input('Add ingredient number: ')
-            ingredients_to_be_added.append(Ingredient.records[int(choice) - 1])
-            for ingredient in ingredients_to_be_added:
-                pizza.add_ingredient(ingredient)
+            # ingredients_to_be_added.append(Ingredient.records[int(choice) - 1])
+            for ingredient in Ingredient.records:
+                if ingredient.id == int(choice):
+                    pizza.add_ingredient(ingredient)
         elif choice == '2':
             print ('Available ingredients:')
-            for ingredient in Ingredient.records:
-                print((ingredient['id'], str(ingredient['name'])))
-            choice = input('Remove ingredient number: ')
-            for ingredient in ingredients_to_be_added:
-                if ingredient['id'] == int(choice):
-                    ingredients_to_be_added.remove(ingredient)
-                    pizza.remove_ingredient(ingredient)
-            pizza.remove_ingredient(choice)
+            if len(pizza.ingredients) != 0:
+                for ingredient in pizza.ingredients:
+                    print((ingredient.id, str(ingredient.name)))
+                choice = input('Remove ingredient number: ')
+                for ingredient in Ingredient.records:
+                    if ingredient.id == int(choice):
+                        pizza.remove_ingredient(ingredient)
+            else:
+                print('No ingredients')
         elif choice == '3':
             break
         else:
@@ -124,7 +184,10 @@ def menu():
         elif choice == '4':
             pizza = order_pizza('custom_pizza')
             choose_ingredients(pizza)
-            save_pizza(pizza)
+            if len(pizza.ingredients) != 0:
+                save_pizza(pizza)
+            else:
+                print('Pizza couldn\'t be processed: No ingredients')
         elif choice == '5':
             break   
 
@@ -160,13 +223,12 @@ def admin_menu():
             ingredient = Ingredient(ingredient_name, ingredient_price_per_unit, quantity=ingredient_quantity)
             ingredient.save_record()
         elif choice == '4':
-            Ingredient.load_records()
             if len(Ingredient.records) == 0:
                 print('No ingredients')
             else:
                 print("Ingredients:")
                 for ingredient in Ingredient.records:
-                    print((ingredient['id'], str(ingredient['name']), str("{} RON".format(ingredient['price_per_unit'])), ingredient['quantity'], str(ingredient['date'])))
+                    print((ingredient.id, str(ingredient.name), str("{} RON".format(ingredient.price_per_unit)), ingredient.quantity, str(ingredient.date)))
                 ingredient_id = input('Ingredient id (type "none" to esc): ')
                 if ingredient_id == 'none':
                     pass
@@ -178,6 +240,10 @@ def admin_menu():
             pass
 
 if __name__ == '__main__':
+
+    Ingredient.load_records()
+
+    create_basic_ingredients()
 
     while True:
         print("1. Log in as admin")
