@@ -1,1 +1,1 @@
-{"records": []}
+{"records": [{"name": "parsley", "price_per_unit": 500.0, "date": "12/07/2022", "id": 1, "unit": "kg", "quantity": 0.04}, {"name": "curry", "price_per_unit": 700.0, "date": "12/07/2022", "id": 2, "unit": "kg", "quantity": 0.03}]}

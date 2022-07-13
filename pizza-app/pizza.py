@@ -43,9 +43,17 @@ class Pizza():
 
     def add_ingredient(self, ingredient):
         self.ingredients.append(ingredient)
+        # for ingredient in Ingredient.records:
+        #     if ingredient['id'] == int(id):
+        #         self.ingredients.append(ingredient)
 
     def remove_ingredient(self, ingredient):
         self.ingredients.remove(ingredient)
+        # for ingredient in self.ingredients:
+        #     if ingredient['id'] == int(id):
+        #         self.ingredients.remove(ingredient)
+        #     else:
+        #         pass
 
     def save_record(self):
         self.records.append(self.toJSON())
