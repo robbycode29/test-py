@@ -1,0 +1,111 @@
+    1: import os
+    1: from movie import Movie
+    1: from user import User
+    1: import json
+       
+       
+       
+    1: def db(user_list):
+    2:         return {
+    5:             "users": ["{}".format(user.name) for user in user_list]
+       }
+       
+    1: def fetch_users():
+    1:     with open("./accounts/users.json", "r") as f:
+    1:         try:
+    1:             users = []
+    1:             data = json.load(f)
+    1:             accounts = data['users']
+    2:             for user in accounts:
+    1:                 with open('./accounts/{}'.format(user) + ".json", "r") as f:
+    1:                     user_data = json.load(f)
+    1:                     users.append(User.from_json(user_data))
+    1:             return users
+               except: 
+                   return []
+       
+    1: def create_user(name):
+    1:     users.append(User(name))
+    1:     with open("./accounts/users.json", "w") as f:
+    1:         json.dump(db(users), f)
+    1:         user = users[-1]
+    1:     return user
+       
+    1: def delete_user(user):
+    1:     users.remove(user)
+    1:     with open("./accounts/users.json", "w") as f:
+    1:         json.dump(db(users), f)
+    1:     path_to_accounts = "accounts"
+    1:     user_to_remove = str(user) + ".json"
+    1:     if os.path.exists(path_to_accounts):
+    1:         path_to_be_removed = os.path.join(path_to_accounts, user_to_remove)
+    1:         print(path_to_be_removed)
+    1:         try:
+                   # os.chmod(path_to_be_removed, 0o777)
+    1:             os.remove(path_to_be_removed)
+               except Exception as e:
+                   print("Error:" + e)
+    1:         del user
+    1:         user = users[-1]
+           else:
+               print("No accounts found")
+       
+    1: def user_select_menu():
+           for i, user in enumerate(users):
+               print(i, user.name)
+           choice = input("Your user choice: ")
+           return choice
+           
+       
+    1: def menu():
+    3:     print("0. Select user:")
+    3:     print("1. Add user")
+    3:     print("2. Delete user")
+    3:     print("3. Add movie")
+    3:     print("4. Delete movie")
+    3:     print("5. Mark movie as watched")
+    3:     print("6. Print user")
+    3:     print("7. Print all movies")
+    3:     print("8. Print watched movies")
+    3:     print("9. Exit")
+    3:     choice = input("Your choice: ")
+    3:     return choice
+       
+       
+    1: users = fetch_users()
+       
+    1: if __name__ == '__main__':
+    3:     while True:
+    3:         choice = menu()
+    3:         if choice == "0":
+                   choice = user_select_menu()
+                   user = users[int(choice)]
+    3:         elif choice == "1":
+    1:             name = input("Name: ")
+    1:             user = create_user(name)
+    2:         elif choice == "2":
+    1:             delete_user(user)
+    1:         elif choice == "3":
+                   name = input("Name: ")
+                   genre = input("Genre: ")
+                   watched = input("Watched: ")
+                   user.add_movie(Movie(name, genre, watched))
+    1:         elif choice == "4":
+                   name = input("Name: ")
+                   user.delete_movie(Movie(name))
+    1:         elif choice == "5":
+                   name = input("Name: ")
+                   user.movies[name].watched()
+    1:         elif choice == "6":
+                   print(user)
+    1:         elif choice == "7":
+                   print(user.movies)
+    1:         elif choice == "8":
+                   print(user.watched_movies())
+    1:         elif choice == "9":
+    1:             break
+               else:
+                   print("Invalid choice")
+    2:         user.save_to_file_as_json()
+    1:     print("Bye!")
+           
