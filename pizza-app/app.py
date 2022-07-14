@@ -98,8 +98,8 @@ def create_basic_ingredients():
         pepperoni.save_record()
    
 
-#######################################################################################################################
-####                                                    Menus                                                     #####
+######################################################################################################################
+####                                                    Menus                                                     ####
 
 def choose_ingredients(pizza):
     # if len(pizza.ingredients) != 0:
@@ -163,7 +163,6 @@ def customer_interface():
     return input('Your choice: ')
 
 def add_to_cart(pizza):
-    # Order.load_orders()
     any_order_open = False
     for order in Order.orders:
         if order.status == True:
@@ -175,7 +174,6 @@ def add_to_cart(pizza):
     
     if not any_order_open:
         order = Order([])
-        print(order.pizzas)
         order.add_pizza(pizza)
         order.save_order()
 
@@ -216,7 +214,6 @@ def menu():
             break   
 
 def order_history():
-    # Order.load_orders()
     if len(Order.orders) != 0:
         for order in Order.orders:
             print('Order number: {}'.format(order.order_id))
@@ -251,6 +248,8 @@ def shopping_cart(order):
             if pizza.id == int(pizza_id):
                 order.remove_pizza(pizza)
                 order.save_order()
+                if len(order.pizzas) == 0:
+                    order.remove_order()
                 print('Pizza removed')
                 break
             else:
@@ -295,11 +294,13 @@ def admin_menu():
         choice = admin_interface()
         if choice == '1':
             print("Past orders: ")
-            fetch_records()
-            for pizza in Pizza.records:
-                print((pizza['id'], str(pizza['name']), str("{}".format(pizza['price']) + " RON"), str(pizza['date'])))
+            # fetch_records()
+            # for pizza in Pizza.records:
+            #     print((pizza['id'], str(pizza['name']), str("{}".format(pizza['price']) + " RON"), str(pizza['date'])))
+            order_history()
         elif choice == '2':
             Pizza.clear_records()
+            Order.clear_orders()
         elif choice == '3':
             ingredient_name = input('Ingredient name: ')
             ingredient_price_per_unit = float(input('Ingredient price per unit: '))

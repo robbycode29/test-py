@@ -20,16 +20,18 @@ class Order():
             "status": self.status
         }
     
-    def order_JSON(self):
+    @classmethod
+    def order_JSON(cls):
         return {
             "orders": [
-                order.toJSON() for order in self.orders
+                order.toJSON() for order in cls.orders
             ]
         }
 
-    def db_dump(self):
+    @classmethod
+    def db_dump(cls):
         with open('./db/orders.json', 'w') as f:
-            json.dump(self.order_JSON(), f)
+            json.dump(cls.order_JSON(), f)
 
     def save_order(self):
         order_is_in_list = False
@@ -39,10 +41,10 @@ class Order():
             else:
                 pass
         if order_is_in_list == False:
-            self.orders.append(self)
-            self.db_dump()
+            Order.orders.append(self)
+            Order.db_dump()
         else:
-            self.db_dump()
+            Order.db_dump()
 
     @classmethod
     def load_orders(cls):
@@ -88,6 +90,11 @@ class Order():
 
     def remove_pizza(self, pizza):
         self.pizzas.remove(pizza)
+        self.save_order()
+
+    def remove_order(self):
+        Order.orders.remove(self)
+        self.status = False
         self.save_order()
 
     def get_id(self):
