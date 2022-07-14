@@ -147,7 +147,7 @@ class Pizza():
             json.dump({}, f)
         path_to_file = './db/'
         for filename in os.listdir(path_to_file):
-            if filename.endswith('.json') and filename != 'pizzas.json' and filename != 'ingredients.json':
+            if filename.endswith('.json') and filename != 'pizzas.json' and filename != 'ingredients.json' and filename != 'orders.json':
                 os.remove(path_to_file + filename)
         Pizza.records = []
 

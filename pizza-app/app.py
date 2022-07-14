@@ -1,3 +1,4 @@
+from order import Order
 from pizza import Pizza
 from ingredient import Ingredient
 import json
@@ -157,8 +158,27 @@ def customer_interface():
     print('Welcome to the pizza shop!')
     print('1. Order a pizza')
     print('2. See order history')
-    print('3. Exit')
+    print('3. Go to shopping cart')
+    print('4. Exit')
     return input('Your choice: ')
+
+def add_to_cart(pizza):
+    # Order.load_orders()
+    any_order_open = False
+    for order in Order.orders:
+        if order.status == True:
+            order.add_pizza(pizza)
+            order.save_order()
+            any_order_open = True
+        else:
+            any_order_open = False
+    
+    if not any_order_open:
+        order = Order([])
+        print(order.pizzas)
+        order.add_pizza(pizza)
+        order.save_order()
+
 
 def menu():
     while True:
@@ -173,28 +193,72 @@ def menu():
             pizza = order_pizza('margerita')
             choose_ingredients(pizza)
             save_pizza(pizza)
+            add_to_cart(pizza)
         elif choice == '2':
             pizza = order_pizza('salami')
             choose_ingredients(pizza)
             save_pizza(pizza)
+            add_to_cart(pizza)
         elif choice == '3':
             pizza = order_pizza('capricciosa')
             choose_ingredients(pizza)
             save_pizza(pizza)
+            add_to_cart(pizza)
         elif choice == '4':
             pizza = order_pizza('custom_pizza')
             choose_ingredients(pizza)
             if len(pizza.ingredients) != 0:
                 save_pizza(pizza)
+                add_to_cart(pizza)
             else:
                 print('Pizza couldn\'t be processed: No ingredients')
         elif choice == '5':
             break   
 
 def order_history():
-    fetch_records()
-    for pizza in Pizza.records:
-        print((pizza['id'], str(pizza['name']), str("{}".format(pizza['price']) + " RON"), str(pizza['date'])))
+    # Order.load_orders()
+    if len(Order.orders) != 0:
+        for order in Order.orders:
+            print('Order number: {}'.format(order.order_id))
+            print('Status: {}'.format('closed' if not order.status else 'open'))
+            print('Pizzas:')
+            for pizza in order.pizzas:
+                print('{}. {}'.format(pizza.id, pizza.name))
+            print('Total price: {}'.format(order.price))
+            print('-----------------------------------------------------')
+    else:
+        print('No orders')
+    # fetch_records()
+    # for pizza in Pizza.records:
+    #     print((pizza['id'], str(pizza['name']), str("{}".format(pizza['price']) + " RON"), str(pizza['date'])))
+
+def shopping_cart(order):
+    print('Your shopping cart:')
+    for pizza in order.pizzas:
+        print((pizza.id, str(pizza.name), str("{}".format(pizza.price) + " RON")))
+    print('Total: ' + str("{}".format(sum(pizza.price for pizza in order.pizzas)) + " RON"))
+    print('1. Pay')
+    print('2. Remove pizza')
+    print('3. Exit')
+    choice = input('Your choice: ')
+    if choice == '1':
+        print('Thank you for your order!')
+        order.status = False
+        order.save_order()
+    elif choice == '2':
+        pizza_id = input('Remove pizza number: ')
+        for pizza in order.pizzas:
+            if pizza.id == int(pizza_id):
+                order.remove_pizza(pizza)
+                order.save_order()
+                print('Pizza removed')
+                break
+            else:
+                pass
+    elif choice == '3':
+        pass
+    else:
+        pass
 
 def customer_menu():
     while True:
@@ -204,6 +268,26 @@ def customer_menu():
         elif choice == '2':
             order_history()
         elif choice == '3':
+            Order.load_orders()
+            exists_open_order = False
+            for order in Order.orders:
+                if order.status == True:
+                    shopping_cart(order)
+                    exists_open_order = True
+                else:
+                    pass
+            if exists_open_order == False:
+                print('No items in shopping cart')
+            
+            # if len(Order.orders) == 0:
+            #     print('Shopping cart empty!')
+            # else:
+            #     for order in Order.orders:
+            #         if order.status == True:
+            #             shopping_cart(order)
+            #         else:
+            #             pass
+        elif choice == '4':
             break
 
 def admin_menu():
@@ -244,6 +328,8 @@ if __name__ == '__main__':
     Ingredient.load_records()
 
     create_basic_ingredients()
+
+    Order.load_orders()
 
     while True:
         print("1. Log in as admin")

@@ -31,3 +31,19 @@ functionalitati:
 	sa calculeze pretul
 
 	recreaza meniul ca market funnel
+
+
+new tasks:
+
+- permiterea adăugării unei alte comenzi sau achiziția după alegerea unei pizza standard
+- ingredientele trebuie să aibă un ID și un nume unic
+- permiterea anulării în etapa de eliminare a ingredientului
+- interzicerea eliminării ingredientelor implicite  (de exemplu, blat care poate fi doar înlocuit)
+- pizza personalizată ar trebui să aibă ingrediente implicite
+- pizza personalizată ar trebui să permită adăugarea mai multor ingrediente în același timp
+- interzicerea adăugării de ingrediente special (de exemplu, blatul nu poate fi adăugat, ci doar înlocuit)
+
+- adăugarea orei la momentul comandării unei pizza
+
+
+- adăugarea unei opțiuni de administrare pentru a vedea lista tuturor ingredientelor disponibile
