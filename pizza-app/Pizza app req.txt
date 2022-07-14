@@ -1,18 +1,18 @@
-create pizza ca obiect:
+check - create pizza ca obiect:
 	id 
 	nume
 	ingrediente
 	data
 	pret 
 
-ingrediente - clasa
+check - ingrediente - clasa
 
 	id
 	nume
 	pret
 
 
-functionalitati:
+check - functionalitati:
 	
 	sa poti crea o pizza
 	sa calculeze pretul total bazat pe ingred si adaos
@@ -35,9 +35,9 @@ functionalitati:
 
 new tasks:
 
-- permiterea adăugării unei alte comenzi sau achiziția după alegerea unei pizza standard
-- ingredientele trebuie să aibă un ID și un nume unic
-- permiterea anulării în etapa de eliminare a ingredientului
+check - permiterea adăugării unei alte comenzi sau achiziția după alegerea unei pizza standard
+check - ingredientele trebuie să aibă un ID și un nume unic
+check - permiterea anulării în etapa de eliminare a ingredientului
 - interzicerea eliminării ingredientelor implicite  (de exemplu, blat care poate fi doar înlocuit)
 - pizza personalizată ar trebui să aibă ingrediente implicite
 - pizza personalizată ar trebui să permită adăugarea mai multor ingrediente în același timp

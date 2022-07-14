@@ -127,16 +127,27 @@ def choose_ingredients(pizza):
             # ingredients_to_be_added.append(Ingredient.records[int(choice) - 1])
             for ingredient in Ingredient.records:
                 if ingredient.id == int(choice):
-                    pizza.add_ingredient(ingredient)
+                    is_ingredient_already_added = False
+                    for item in pizza.ingredients:
+                        if item.id == ingredient.id or item.name == ingredient.name:
+                            print('Already added!')
+                            is_ingredient_already_added = True
+                        else: 
+                            pass
+                    if not is_ingredient_already_added:
+                        pizza.add_ingredient(ingredient)
         elif choice == '2':
             print ('Available ingredients:')
             if len(pizza.ingredients) != 0:
                 for ingredient in pizza.ingredients:
                     print((ingredient.id, str(ingredient.name)))
-                choice = input('Remove ingredient number: ')
-                for ingredient in Ingredient.records:
-                    if ingredient.id == int(choice):
-                        pizza.remove_ingredient(ingredient)
+                choice = input('Remove ingredient number (or "none" to exit): ')
+                if choice == 'none':
+                    pass
+                else:
+                    for ingredient in Ingredient.records:
+                        if ingredient.id == int(choice):
+                            pizza.remove_ingredient(ingredient)
             else:
                 print('No ingredients')
         elif choice == '3':
@@ -150,7 +161,8 @@ def admin_interface():
     print('2. Clear records')
     print('3. Add ingredient to cookbook')
     print('4. Remove ingredient from cookbook')
-    print('5. Exit')
+    print('5. See all ingredients in cookbook')
+    print('6. Exit')
     return input('Your choice: ')
 
 
@@ -320,6 +332,14 @@ def admin_menu():
                 else:
                     Ingredient.remove_record(ingredient_id)
         elif choice == '5':
+            if len(Ingredient.records) == 0:
+                print('No ingredients')
+            else:
+                print("Ingredients:")
+                for ingredient in Ingredient.records:
+                    print((ingredient.id, str(ingredient.name), str("{} RON".format(ingredient.price_per_unit)), ingredient.quantity, str(ingredient.date)))
+                    
+        elif choice == '6':
             break
         else:
             pass
