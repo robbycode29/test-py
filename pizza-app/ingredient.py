@@ -12,6 +12,7 @@ class Ingredient():
         self.quantity = quantity
         self.unit = unit
         self.date = date.today().strftime("%d/%m/%Y")
+        self.implicit = False
 
     def calculate_price(self):
         return self.price_per_unit * self.quantity
@@ -23,7 +24,8 @@ class Ingredient():
             "price_per_unit": self.price_per_unit,
             "quantity": self.quantity,
             "unit": self.unit,
-            "date": self.date
+            "date": self.date,
+            "implicit": self.implicit
         }
     
     @classmethod
@@ -43,6 +45,7 @@ class Ingredient():
             else:
                 for ingredient in ingredients['records']:
                     new_ingredient = Ingredient(ingredient['name'], ingredient['price_per_unit'], ingredient['quantity'], ingredient['unit'])
+                    new_ingredient.implicit = ingredient['implicit']
                     cls.records.append(new_ingredient)
 
     def __repr__(self):

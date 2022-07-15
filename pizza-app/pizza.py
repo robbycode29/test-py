@@ -128,7 +128,18 @@ class Pizza():
 
     @classmethod
     def create_custom_pizza(cls, id):
-        return Pizza(id, 'Custom')
+
+        for record in Ingredient.records:
+            if record.name == 'blat_normal':
+                blat_normal = record
+            if record.name == 'mozzarella':
+                topping = record
+            if record.name == 'tomato_sauce':
+                sos = record
+
+        standard_ingredients = [blat_normal, topping, sos]
+
+        return Pizza(id, 'Custom', standard_ingredients)
 
     def save_to_file(self):
         with open('./db/{}.json'.format(self.name + str(self.id)), 'a') as f:
@@ -147,8 +158,16 @@ class Pizza():
             json.dump({}, f)
         path_to_file = './db/'
         for filename in os.listdir(path_to_file):
-            if filename.endswith('.json') and filename != 'pizzas.json' and filename != 'ingredients.json':
+            if filename.endswith('.json') and filename != 'pizzas.json' and filename != 'ingredients.json' and filename != 'orders.json':
                 os.remove(path_to_file + filename)
         Pizza.records = []
+
+    def change_crust(self, crust):
+        
+        for ingredient in self.ingredients:
+            if ingredient.name[:4] == 'blat':
+                self.ingredients.remove(ingredient)
+                self.ingredients.append(crust)
+                break
 
       
