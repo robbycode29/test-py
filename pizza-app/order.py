@@ -1,6 +1,7 @@
 import json
 from ingredient import Ingredient
 from pizza import Pizza
+from datetime import datetime
 
 class Order():
 
@@ -11,13 +12,15 @@ class Order():
         self.pizzas = pizzas
         self.price = self.calculate_price()
         self.status = True
+        self.date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     def toJSON(self):
         return {
             "order_id": self.order_id,
             "pizzas": [pizza.toJSON() for pizza in self.pizzas],
             "price": self.calculate_price(),
-            "status": self.status
+            "status": self.status,
+            "date": self.date
         }
     
     @classmethod

@@ -45,12 +45,19 @@ def create_pizza(id, pizza_type):
 
 def create_basic_ingredients():
     blat_normal = Ingredient('blat_normal', 5, 0.15)
+    blat_normal.implicit = True
     blat_subtire = Ingredient('blat_subtire', 4, 0.15)
+    blat_subtire.implicit = True
     blat_pufos = Ingredient('blat_pufos', 6, 0.15)
+    blat_pufos.implicit = True
     topping = Ingredient('mozzarella', 10, 0.08)
+    topping.implicit = True
     sos = Ingredient('tomato_sauce', 8, 0.05)
+    sos.implicit = True
     salami = Ingredient('salami', 15, 0.1)
+    salami.implicit = True
     pepperoni = Ingredient('pepperoni', 20, 0.15)
+    pepperoni.implicit = True
 
     blat_normal_exists = False
     blat_subtire_exists = False
@@ -110,47 +117,76 @@ def choose_ingredients(pizza):
         print ("Current ingredients:")
         if len(pizza.ingredients) != 0:
             for ingredient in pizza.ingredients:
-                print("{}. {}".format(ingredient.id, ingredient.name))
+                print("{}. {}, price per 1kg: {} RON".format(ingredient.id, ingredient.name, ingredient.price_per_unit))
+            pizza.calculate_price()
+            print("Total price: {} RON".format(pizza.price))
         else:
             print("No ingredients")
 
         print("Would you like to add an extra ingredient?")
         print('1. Add ingredient')
         print('2. Remove ingredient')
-        print('3. Finish')
+        print('3. Change crust')
+        print('4. Finish')
         choice = input('Choose action: ')
         if choice == '1':
             print ('Available ingredients:')
+            exists_available_ingredients = False
             for ingredient in Ingredient.records:
-                print((ingredient.id, str(ingredient.name)))
-            choice = input('Add ingredient number: ')
-            # ingredients_to_be_added.append(Ingredient.records[int(choice) - 1])
-            for ingredient in Ingredient.records:
-                if ingredient.id == int(choice):
-                    is_ingredient_already_added = False
-                    for item in pizza.ingredients:
-                        if item.id == ingredient.id or item.name == ingredient.name:
-                            print('Already added!')
-                            is_ingredient_already_added = True
-                        else: 
-                            pass
-                    if not is_ingredient_already_added:
-                        pizza.add_ingredient(ingredient)
+                if not ingredient.implicit:
+                    print((ingredient.id, str(ingredient.name)))
+                    exists_available_ingredients = True
+                else:
+                    pass
+            if not exists_available_ingredients:
+                print('No available ingredients')
+            else:
+                choice = input('Add ingredient number(s) separated by a comma (or type "none" to exit): ')
+                choices = choice.split(',')
+                for ingredient in Ingredient.records:
+                    if str(ingredient.id) in choices:
+                        is_ingredient_already_added = False
+                        for item in pizza.ingredients:
+                            if item.id == ingredient.id or item.name == ingredient.name:
+                                print('Already added!')
+                                is_ingredient_already_added = True
+                            else: 
+                                pass
+                        if not is_ingredient_already_added:
+                            pizza.add_ingredient(ingredient)
+                    elif choice == 'none':
+                        break
         elif choice == '2':
             print ('Available ingredients:')
             if len(pizza.ingredients) != 0:
                 for ingredient in pizza.ingredients:
                     print((ingredient.id, str(ingredient.name)))
-                choice = input('Remove ingredient number (or "none" to exit): ')
+                choice = input('Remove ingredient number(s) separated by a comma (or "none" to exit): ')
+                choices = choice.split(',')
                 if choice == 'none':
                     pass
                 else:
                     for ingredient in Ingredient.records:
-                        if ingredient.id == int(choice):
-                            pizza.remove_ingredient(ingredient)
+                        if str(ingredient.id) in choices:
+                            if ingredient.implicit:
+                                print('Cannot remove implicit ingredient')
+                            else:
+                                pizza.remove_ingredient(ingredient)
             else:
                 print('No ingredients')
         elif choice == '3':
+            print ('Available crusts:')
+            for ingredient in Ingredient.records:
+                if ingredient.name == 'blat_normal' or ingredient.name == 'blat_subtire' or ingredient.name == 'blat_pufos':
+                    print((ingredient.id, str(ingredient.name)))
+            choice = input('Choose crust number: ')
+            for ingredient in Ingredient.records:
+                if ingredient.id == int(choice):
+                    if ingredient.name == 'blat_normal' or ingredient.name == 'blat_subtire' or ingredient.name == 'blat_pufos':
+                        pizza.change_crust(ingredient)
+                    else:
+                        print('Cannot change crust to this type')
+        elif choice == '4':
             break
         else:
             break
@@ -229,10 +265,15 @@ def order_history():
     if len(Order.orders) != 0:
         for order in Order.orders:
             print('Order number: {}'.format(order.order_id))
+            print('Date: {}'.format(order.date))
             print('Status: {}'.format('closed' if not order.status else 'open'))
             print('Pizzas:')
             for pizza in order.pizzas:
-                print('{}. {}'.format(pizza.id, pizza.name))
+                crust = ''
+                for ingredient in pizza.ingredients:
+                    if ingredient.name[:4] == 'blat':
+                        crust = ingredient 
+                print('{}. {}, crust type: {}'.format(pizza.id, pizza.name, crust.name))
             print('Total price: {}'.format(order.price))
             print('-----------------------------------------------------')
     else:
@@ -247,25 +288,28 @@ def shopping_cart(order):
         print((pizza.id, str(pizza.name), str("{}".format(pizza.price) + " RON")))
     print('Total: ' + str("{}".format(sum(pizza.price for pizza in order.pizzas)) + " RON"))
     print('1. Pay')
-    print('2. Remove pizza')
+    print('2. Remove pizza(s)')
     print('3. Exit')
     choice = input('Your choice: ')
     if choice == '1':
         print('Thank you for your order!')
         order.status = False
         order.save_order()
-    elif choice == '2':
-        pizza_id = input('Remove pizza number: ')
-        for pizza in order.pizzas:
-            if pizza.id == int(pizza_id):
-                order.remove_pizza(pizza)
-                order.save_order()
-                if len(order.pizzas) == 0:
-                    order.remove_order()
-                print('Pizza removed')
-                break
-            else:
-                pass
+    elif choice == '2': # doesn't work with multiple choices for some reason
+        choice = input('Remove pizza number(s) separated by a comma (or type "none" to cancel): ')
+        choices = choice.split(',')
+        if choice == 'none':
+            pass
+        else:
+            for pizza in order.pizzas:
+                print(pizza)
+                if str(pizza.id) in choices:
+                    order.remove_pizza(pizza)
+                    if len(order.pizzas) == 0:
+                        order.remove_order()
+                    print('Pizza removed')
+                else:
+                    pass
     elif choice == '3':
         pass
     else:
