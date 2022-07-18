@@ -295,21 +295,25 @@ def shopping_cart(order):
         print('Thank you for your order!')
         order.status = False
         order.save_order()
-    elif choice == '2': # doesn't work with multiple choices for some reason
+    elif choice == '2':
         choice = input('Remove pizza number(s) separated by a comma (or type "none" to cancel): ')
         choices = choice.split(',')
         if choice == 'none':
             pass
         else:
+            pizzas_to_remove = []
             for pizza in order.pizzas:
-                print(pizza)
                 if str(pizza.id) in choices:
-                    order.remove_pizza(pizza)
-                    if len(order.pizzas) == 0:
-                        order.remove_order()
-                    print('Pizza removed')
+                    pizzas_to_remove.append(pizza)
                 else:
                     pass
+            for item in pizzas_to_remove:
+                if item in order.pizzas:
+                    order.pizzas.remove(item)
+            order.save_order()
+            print('Pizza(s) removed')
+            if len(order.pizzas) == 0:
+                order.remove_order()
     elif choice == '3':
         pass
     else:
